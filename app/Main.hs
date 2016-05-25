@@ -3,4 +3,6 @@ module Main where
 import Lib
 
 main :: IO ()
-main = someFunc
+main = do
+  exitCode <- shellDate
+  putStrLn $ show exitCode

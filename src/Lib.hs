@@ -1,6 +1,10 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Lib
-    ( someFunc
+    ( shellDate
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import Turtle
+
+shellDate :: IO ExitCode
+shellDate = shell "date" empty
