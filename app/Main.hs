@@ -6,5 +6,6 @@ import Lib
 main :: IO ()
 main = do
   _exitCode <- shellDate
-  [repoPath, sleepSeconds] <- getArgs
-  putStrLn $ "Fetching in " ++ repoPath ++ " every " ++ show sleepSeconds ++ " seconds"
+  args <- getArgs
+  let (repoPath, sleepSeconds) = parseArgs args
+  putStrLn $ "Fetching every " ++ show sleepSeconds ++ " seconds in " ++ show repoPath
