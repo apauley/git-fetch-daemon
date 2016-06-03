@@ -25,11 +25,10 @@ library
 executable git-fetch-daemon
   hs-source-dirs:      app
   main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
 
-  if os(osx)
-    ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  else
-    ghc-options:         -threaded -rtsopts -with-rtsopts=-N -static -optc-static -optl-static
+  if !os(osx)
+    ghc-options:       -static -optc-static -optl-static
 
   build-depends:       base
                      , git-fetch-daemon
