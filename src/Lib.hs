@@ -5,7 +5,7 @@ module Lib
     , fetch
     ) where
 
-import Prelude hiding (FilePath)
+import Prelude hiding (FilePath, log)
 import Filesystem.Path.CurrentOS (decodeString)
 import Data.Text (pack)
 import Turtle
@@ -20,26 +20,30 @@ fetch repoDir sleepSeconds = do
   cd repoDir
   dir <- pwd
 
-  echo $ format ("Fetching every "%s%" in " %fp% "") (pack $ show sleepSeconds) dir
+  fetchOne dir .||. die (format ("Error fetching in "%fp%". Is this a git repository?") dir)
 
-  fetchOne dir
+  log $ format ("Fetching every "%s%" in " %fp% "") (pack $ show sleepSeconds) dir
+  fetchEvery dir sleepSeconds
 
+fetchEvery :: FilePath -> NominalDiffTime -> IO ()
+fetchEvery dir sleepSeconds = do
   sleep sleepSeconds
-  fetch dir sleepSeconds
+  fetchOne dir
+  fetchEvery dir sleepSeconds
 
 fetchOne :: FilePath -> IO ExitCode
 fetchOne dir = do
-  now1 <- dateString
-  echo $ format (s%" Fetching " %fp% "") now1 dir
-
+  log $ format ("Running a git fetch in " %fp) dir
   exitCode <- shell "git fetch" empty
-
-  now2 <- dateString
-  echo $ format (s%" Fetched " %fp% " "%s%"\n") now2 dir $ pack $ show exitCode
-
+  log $ format ("Done running a git fetch in " %fp% " - "%s%"\n") dir $ pack $ show exitCode
   return exitCode
 
 defaultSleepSeconds = 120
+
+log :: Text -> IO ()
+log msg = do
+  now <- dateString
+  echo $ format (s%" - "%s) now msg
 
 dateString :: IO Text
 dateString = do
