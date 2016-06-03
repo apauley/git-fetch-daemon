@@ -13,8 +13,6 @@ main = do
   let (repoPath, sleepSeconds) = parseArgs args
 
   putStrLn $ usage me
-  putStrLn $ "Fetching every " ++ show sleepSeconds ++ " seconds in " ++ show repoPath
-
   fetch repoPath sleepSeconds
 
 usage :: String -> String

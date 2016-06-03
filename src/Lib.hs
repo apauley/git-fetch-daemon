@@ -16,9 +16,19 @@ parseArgs (repoPath:s:_) = (decodeString repoPath, realToFrac $ read s)
 parseArgs _ = (decodeString ".", defaultSleepSeconds)
 
 fetch :: FilePath -> NominalDiffTime -> IO ()
-fetch dir sleepSeconds = do
-  cd dir
+fetch repoDir sleepSeconds = do
+  cd repoDir
+  dir <- pwd
 
+  echo $ format ("Fetching every "%s%" in " %fp% "") (pack $ show sleepSeconds) dir
+
+  fetchOne dir
+
+  sleep sleepSeconds
+  fetch dir sleepSeconds
+
+fetchOne :: FilePath -> IO ExitCode
+fetchOne dir = do
   now1 <- dateString
   echo $ format (s%" Fetching " %fp% "") now1 dir
 
@@ -27,8 +37,7 @@ fetch dir sleepSeconds = do
   now2 <- dateString
   echo $ format (s%" Fetched " %fp% " "%s%"\n") now2 dir $ pack $ show exitCode
 
-  sleep sleepSeconds
-  fetch dir sleepSeconds
+  return exitCode
 
 defaultSleepSeconds = 120
 
