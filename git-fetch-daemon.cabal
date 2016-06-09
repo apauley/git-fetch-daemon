@@ -17,9 +17,6 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
-                     , system-filepath
-                     , text
-                     , turtle >= 1.2.7 && < 1.3
   default-language:    Haskell2010
 
 executable git-fetch-daemon
@@ -32,6 +29,8 @@ executable git-fetch-daemon
 
   build-depends:       base
                      , turtle >= 1.2.7 && < 1.3
+                     , system-filepath
+                     , text
                      , git-fetch-daemon
   default-language:    Haskell2010
 
