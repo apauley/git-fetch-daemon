@@ -31,6 +31,7 @@ executable git-fetch-daemon
     ghc-options:       -static -optc-static -optl-static
 
   build-depends:       base
+                     , turtle >= 1.2.7 && < 1.3
                      , git-fetch-daemon
   default-language:    Haskell2010
 
