@@ -3,13 +3,13 @@
 module Main where
 
 import Turtle
-import System.Environment (getArgs, getProgName)
+import System.Environment (getProgName)
 import Lib
 
 main :: IO ()
 main = do
   me   <- getProgName
-  args <- getArgs
+  args <- arguments
   let (repoPath, sleepSeconds) = parseArgs args
 
   putStrLn $ usage me
