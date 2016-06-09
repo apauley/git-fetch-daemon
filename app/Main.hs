@@ -3,17 +3,16 @@
 module Main where
 
 import Turtle
-import System.Environment (getProgName)
+import Prelude hiding (FilePath, log)
 import Lib
 
 main :: IO ()
 main = do
-  me   <- getProgName
-  args <- arguments
-  let (repoPath, sleepSeconds) = parseArgs args
+  (repoPath, secs) <- options "Runs a `git fetch` continuously for a given repository" parser
 
-  putStrLn $ usage me
+  let sleepSeconds = realToFrac secs
   fetch repoPath sleepSeconds
 
-usage :: String -> String
-usage me = "Usage: " ++ me ++ " /path/to/repo sleepSeconds\n"
+parser :: Parser (FilePath, Int)
+parser = (,) <$> argPath "repo"  "The path to a git repository"
+             <*> argInt "sleepSeconds" "The number of seconds to sleep between fetches"

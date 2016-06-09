@@ -1,19 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Lib
-    (parseArgs
-    , fetch
+    ( fetch
     ) where
 
 import Prelude hiding (FilePath, log)
 import Filesystem.Path.CurrentOS (fromText)
 import Data.Text (pack, unpack)
 import Turtle
-
-parseArgs :: [Text] -> (FilePath, NominalDiffTime)
-parseArgs [repoPath] = (fromText repoPath, defaultSleepSeconds)
-parseArgs (repoPath:s:_) = (fromText repoPath, realToFrac $ read $ unpack s)
-parseArgs _ = (fromText ".", defaultSleepSeconds)
 
 fetch :: FilePath -> NominalDiffTime -> IO ()
 fetch repoDir sleepSeconds = do
