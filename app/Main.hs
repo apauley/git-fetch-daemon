@@ -1,5 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
+import Turtle
 import System.Environment (getArgs, getProgName)
 import Lib
 
