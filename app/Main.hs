@@ -11,14 +11,15 @@ defaultSleepSeconds = 120
 
 main :: IO ()
 main = do
-  (repoPath, secs) <- options "Runs a `git fetch` continuously for a given repository" parser
+  (repoPath, maybeSecs) <- options "Runs a `git fetch` continuously for a given repository" parser
 
-  let sleepSeconds = realToFrac secs
-  fetch repoPath sleepSeconds
+  case maybeSecs of
+    Nothing   -> fetch repoPath defaultSleepSeconds
+    Just secs -> fetch repoPath $ realToFrac secs
 
-parser :: Parser (FilePath, Int)
+parser :: Parser (FilePath, Maybe Int)
 parser = (,) <$> argPath "repo"  "The path to a git repository"
-             <*> argInt "sleepSeconds" "The number of seconds to sleep between fetches"
+             <*> optional (argInt "sleepSeconds" "The number of seconds to sleep between fetches.")
 
 fetch :: FilePath -> NominalDiffTime -> IO ()
 fetch repoDir sleepSeconds = do
