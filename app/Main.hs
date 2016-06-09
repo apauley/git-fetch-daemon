@@ -34,8 +34,8 @@ fetch repoDir sleepSeconds = do
 fetchOne :: FilePath -> IO ExitCode
 fetchOne dir = do
   log $ format ("Running a git fetch in " %fp) dir
-  exitCode <- shell "git fetch" empty
-  log $ format ("Done running a git fetch in " %fp% " - "%s%"\n") dir $ pack $ show exitCode
+  (exitCode, out) <- shellStrict "git fetch" empty
+  log $ format ("Done running a git fetch in " %fp% " - "%s%s) dir (pack $ show exitCode) out
   return exitCode
 
 fetchEvery :: FilePath -> NominalDiffTime -> IO ()
@@ -47,7 +47,7 @@ fetchEvery dir sleepSeconds = do
 log :: Text -> IO ()
 log msg = do
   now <- dateString
-  echo $ format (s%" - "%s) now msg
+  echo $ format (s%" "%s) now msg
 
 dateString :: IO Text
 dateString = do
