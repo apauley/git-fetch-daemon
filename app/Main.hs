@@ -2,10 +2,11 @@
 
 module Main where
 
-import Turtle
-import Prelude hiding (FilePath, log)
+import Turtle hiding (stdout)
+import Prelude hiding (FilePath, log, putStrLn)
 import Filesystem.Path.CurrentOS (fromText)
 import Data.Text (pack)
+import System.IO (hFlush, stdout)
 
 defaultSleepSeconds = 120
 
@@ -48,6 +49,7 @@ log :: Text -> IO ()
 log msg = do
   now <- dateString
   echo $ format (s%" "%s) now msg
+  hFlush stdout
 
 dateString :: IO Text
 dateString = do
