@@ -6,6 +6,7 @@ import Turtle
 import Prelude hiding (FilePath, log, putStrLn)
 import Filesystem.Path.CurrentOS (fromText)
 import Data.Text (pack)
+import Data.Maybe
 import qualified System.IO as SysIO (hFlush, stdout)
 
 defaultSleepSeconds = 120
@@ -13,10 +14,8 @@ defaultSleepSeconds = 120
 main :: IO ()
 main = do
   (repoPath, maybeSecs) <- options "Runs a `git fetch` continuously for a given repository" parser
-
-  case maybeSecs of
-    Nothing   -> fetch repoPath defaultSleepSeconds
-    Just secs -> fetch repoPath $ realToFrac secs
+  let secs = fromMaybe defaultSleepSeconds $ fmap realToFrac maybeSecs
+  fetch repoPath secs
 
 parser :: Parser (FilePath, Maybe Int)
 parser = (,) <$> argPath "repo"  "The path to a git repository"
